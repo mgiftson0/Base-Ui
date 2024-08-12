@@ -24,7 +24,7 @@ const SidebarWrapper = styled.aside`
   top: 20px;
   left: 20px;
   bottom: 20px;
-  width: ${({ isOpen }) => (isOpen ? "220px" : "64px")};
+  width: ${({ $isOpen }) => ($isOpen ? "220px" : "64px")};
   background: rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(10px);
   border-radius: 10px;
@@ -36,7 +36,7 @@ const SidebarWrapper = styled.aside`
     left: 0;
     bottom: auto;
     width: 100%;
-    height: ${({ isOpen }) => (isOpen ? "100%" : "60px")};
+    height: ${({ $isOpen }) => ($isOpen ? "100%" : "60px")};
     border-radius: 0;
     transition: height 0.45s;
   }
@@ -99,7 +99,7 @@ const Nav = styled.nav`
 
   @media (max-width: 768px) {
     padding: 0 4px;
-    display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
+    display: ${({ $isOpen }) => ($isOpen ? "flex" : "none")};
   }
 `;
 
@@ -114,7 +114,7 @@ const NavButton = styled.button`
   text-transform: capitalize;
   line-height: 1;
   padding: 0 14px;
-  border-radius: ${({ isOpen }) => (isOpen ? "10px" : "25px")};
+  border-radius: ${({ $isOpen }) => ($isOpen ? "10px" : "25px")};
   opacity: 0.7;
   color: #f9f9f9;
   background: none;
@@ -128,7 +128,7 @@ const NavButton = styled.button`
   }
 
   span {
-    display: ${({ isOpen }) => (isOpen ? "inline" : "none")};
+    display: ${({ $isOpen }) => ($isOpen ? "inline" : "none")};
   }
 
   @media (max-width: 768px) {
@@ -171,7 +171,7 @@ export const Sidebar3 = () => {
   return (
     <ThemeProvider theme={theme}>
       <PageWrapper>
-        <SidebarWrapper isOpen={isOpen}>
+        <SidebarWrapper $isOpen={isOpen}>
           <SidebarInner>
             <SidebarHeader>
               <BurgerButton onClick={toggleSidebar}>
@@ -179,9 +179,9 @@ export const Sidebar3 = () => {
               </BurgerButton>
               <Logo src={logo} alt="logo" />
             </SidebarHeader>
-            <Nav isOpen={isOpen}>
+            <Nav $isOpen={isOpen}>
               {navItems.map((item) => (
-                <NavButton key={item.label} isOpen={isOpen || isMobile}>
+                <NavButton key={item.label} $isOpen={isOpen || isMobile}>
                   <item.icon fontSize={isMobile ? "small" : "medium"} />
                   <span>{item.label}</span>
                 </NavButton>
