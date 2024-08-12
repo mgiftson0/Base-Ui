@@ -2,11 +2,11 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Google as GoogleIcon, Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
+import ForgotPasswordModal from './ForgotPasswordModal';
 
 const Container = styled.div`
     display: flex;
     min-height: 100vh;
-    // background-image: url('https://source.unsplash.com/random?wallpapers');
     background-size: cover;
     background-position: center;
     @media (max-width: 768px) {
@@ -32,9 +32,7 @@ const RightSection = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    // background: rgba(255, 255, 255, 0.9);
-    backdrop-filter: blur(10px);
-    padding: 40px;
+
     @media (max-width: 768px) {
         width: 100%;
         padding: 20px;
@@ -50,14 +48,29 @@ const RightSection = styled.div`
 `;
 
 const Card = styled.div`
-    background: #fff;
+    backdrop-filter: blur(10px);
     border-radius: 15px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 1);
+    width: 90%;
     max-width: 400px;
     padding: 20px;
+    height: fit-content;
     overflow: hidden;
     transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: 2px solid transparent;
+    border-radius: 15px;
+    padding: 40px;
+    animation: borderColorChange 5s infinite alternate;
+
+    @keyframes borderColorChange {
+        0% { border-color: #ff6b6b; }
+        25% { border-color: #4ecdc4; }
+        50% { border-color: #45b7d1; }
+        75% { border-color: #f7b731; }
+        100% { border-color: #ff6b6b; }
+    }
     
     @media (max-width: 768px) {
         border-radius: 10px;
@@ -68,10 +81,10 @@ const Card = styled.div`
 `;
 
 const CardHeader = styled.div`
-    color: #333;
+    color: white;
     padding: 10px 0;
     text-align: center;
-    font-size: 26px;
+    font-size: 23px;
     font-weight: 500;
     font-family: 'Trebuchet MS', 'sans-serif';
     border-bottom: 2px solid #f0f0f0;
@@ -97,7 +110,7 @@ const Input = styled.input`
     margin: 12px 0;
     border: 2px solid #ddd;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 14px;
     transition: all 0.3s ease;
     background: #fff;
 
@@ -119,7 +132,7 @@ const Button = styled.button`
     border: none;
     border-radius: 25px;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 16px;
     margin: 20px auto 0;
     display: block;
     transition: all 0.3s ease;
@@ -149,9 +162,11 @@ const GoogleIconButton = styled.button`
     cursor: pointer;
     margin-top: 20px;
     transition: all 0.3s ease;
-
+    box-shadow: 0 5px 15px rgba(255, 255, 255, 1);
     &:hover {
         background: #f5f5f5;
+        transition: all 0.3s ease;
+        color: #e9967a;
     }
 
     svg {
@@ -175,7 +190,7 @@ const ToggleContainer = styled.div`
 
 const ToggleHeader = styled.h2`
     font-size: 20px;
-    color: ${props => props.active ? '#4285F4' : '#888'};
+    color: ${props => props.$active ? '#4285F4' : '#888'};
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
@@ -190,7 +205,7 @@ const ToggleHeader = styled.h2`
         bottom: -5px;
         left: 0;
         background-color: #4285F4;
-        transform: scaleX(${props => props.active ? 1 : 0});
+        transform: scaleX(${props => props.$active ? 1 : 0});
         transition: transform 0.3s ease;
     }
 
@@ -208,7 +223,7 @@ const ToggleHeader = styled.h2`
 `;
 
 const ForgotPassword = styled.a`
-    font-size: 14px;
+    font-size: 12px;
     color: #4285F4;
     cursor: pointer;
     margin-top: 10px;
@@ -228,8 +243,8 @@ const Label = styled.label`
     flex-direction: column;
     width: 100%;
     margin-bottom: 15px;
-    font-size: 14px;
-    color: #333;
+    font-size: 12px;
+    color: white;
     font-weight: 500;
     @media (max-width: 480px) {
         font-size: 12px;
@@ -255,8 +270,8 @@ const PasswordToggleIcon = styled.span`
 `;
 
 const GoogleText = styled.p`
-    font-size: 14px;
-    color: #757575;
+    font-size: 12px;
+    color: white;
     margin-top: 10px;
     text-align: center;
     margin-bottom: -10px;
@@ -265,6 +280,7 @@ const GoogleText = styled.p`
 const LoginPage = () => {
     const [isSignUp, setIsSignUp] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
 
     const toggleForm = (value) => {
@@ -281,6 +297,14 @@ const LoginPage = () => {
         navigate('/dashboard');
     };
 
+    const openModal = () => {
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+    };
+
     return (
         <Container>
             <LeftSection>
@@ -291,8 +315,8 @@ const LoginPage = () => {
                     <CardHeader>{isSignUp ? 'Create Account' : 'Welcome Back'}</CardHeader>
                     <CardBody>
                         <ToggleContainer>
-                            <ToggleHeader active={!isSignUp} onClick={() => toggleForm(false)}>Sign In</ToggleHeader>
-                            <ToggleHeader active={isSignUp} onClick={() => toggleForm(true)}>Sign Up</ToggleHeader>
+                            <ToggleHeader $active={!isSignUp} onClick={() => toggleForm(false)}>Sign In</ToggleHeader>
+                            <ToggleHeader $active={isSignUp} onClick={() => toggleForm(true)}>Sign Up</ToggleHeader>
                         </ToggleContainer>
                         {isSignUp && (
                             <Label>
@@ -314,7 +338,7 @@ const LoginPage = () => {
                             </PasswordInputWrapper>
                         </Label>
                         <Button onClick={handleSubmit}>{isSignUp ? 'Sign Up' : 'Sign In'}</Button>
-                        <ForgotPassword href="#">Forgot Password?</ForgotPassword>
+                        <ForgotPassword onClick={openModal}>Forgot Password?</ForgotPassword>
                         <GoogleIconButton>
                             <GoogleIcon />
                         </GoogleIconButton>
@@ -322,6 +346,7 @@ const LoginPage = () => {
                     </CardBody>
                 </Card>
             </RightSection>
+            <ForgotPasswordModal isOpen={isModalOpen} onClose={closeModal} />
         </Container>
     );
 };

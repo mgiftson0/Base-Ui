@@ -8,6 +8,8 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import BuildIcon from "@mui/icons-material/Build";
 import CloudIcon from "@mui/icons-material/Cloud";
 import MailIcon from "@mui/icons-material/Mail";
+import HelpIcon from "@mui/icons-material/Help";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import logo from "../images/logo.svg";
 import { useNavigate } from "react-router-dom";
 
@@ -66,7 +68,7 @@ const SidebarHeader = styled.header`
 `;
 
 const BurgerButton = styled.button`
-  width: 48px;
+  width: 30px;
   height: 72px;
   display: grid;
   place-items: center;
@@ -110,7 +112,7 @@ const NavButton = styled.button`
   height: 50px;
   width: 100%;
   font-family: "Poppins", sans-serif;
-  font-size: 16px;
+  font-size: 14px;
   text-transform: capitalize;
   line-height: 1;
   padding: 0 14px;
@@ -133,7 +135,7 @@ const NavButton = styled.button`
 
   @media (max-width: 768px) {
     height: 44px;
-    font-size: 14px;
+    font-size: 12px;
     padding: 0 10px;
     border-radius: 10px;
     
@@ -143,12 +145,22 @@ const NavButton = styled.button`
   }
 `;
 
+const BottomNav = styled.div`
+  margin-top: auto;
+  padding: 8px;
+`;
+
 const navItems = [
   { label: "Home", icon: HomeIcon },
-  { label: "Settings", icon: SettingsIcon },
   { label: "Build", icon: BuildIcon },
   { label: "Cloud", icon: CloudIcon },
   { label: "Mail", icon: MailIcon }
+];
+
+const bottomNavItems = [
+  { label: "Settings", icon: SettingsIcon },
+  { label: "Help", icon: HelpIcon },
+  { label: "Sign Out", icon: ExitToAppIcon }
 ];
 
 export const Sidebar3 = () => {
@@ -187,6 +199,14 @@ export const Sidebar3 = () => {
                 </NavButton>
               ))}
             </Nav>
+            <BottomNav>
+              {bottomNavItems.map((item) => (
+                <NavButton key={item.label} $isOpen={isOpen || isMobile}>
+                  <item.icon fontSize={isMobile ? "small" : "medium"} />
+                  <span>{item.label}</span>
+                </NavButton>
+              ))}
+            </BottomNav>
           </SidebarInner>
         </SidebarWrapper>
       </PageWrapper>
