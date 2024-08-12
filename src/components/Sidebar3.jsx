@@ -9,11 +9,11 @@ import BuildIcon from "@mui/icons-material/Build";
 import CloudIcon from "@mui/icons-material/Cloud";
 import MailIcon from "@mui/icons-material/Mail";
 import logo from "../images/logo.svg";
+import { useNavigate } from "react-router-dom";
 
 const theme = createTheme();
 
 const PageWrapper = styled.section`
-  background: #17132a url("../images/bg.jpeg");
   background-size: cover;
   min-height: 100vh;
   position: relative;
@@ -24,87 +24,123 @@ const SidebarWrapper = styled.aside`
   top: 20px;
   left: 20px;
   bottom: 20px;
-  width: ${({ isOpen }) => (isOpen ? "190px" : "56px")};
+  width: ${({ isOpen }) => (isOpen ? "220px" : "64px")};
   background: rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(10px);
-  border-radius: 8px;
+  border-radius: 10px;
   transition: width 0.45s;
   z-index: 1000;
 
   @media (max-width: 768px) {
-    left: ${({ isOpen }) => (isOpen ? "0" : "-56px")};
     top: 0;
-    bottom: 0;
+    left: 0;
+    bottom: auto;
+    width: 100%;
+    height: ${({ isOpen }) => (isOpen ? "100%" : "60px")};
     border-radius: 0;
+    transition: height 0.45s;
   }
 `;
 
 const SidebarInner = styled.div`
-  width: 190px;
+  width: 220px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
 `;
 
 const SidebarHeader = styled.header`
   display: flex;
   align-items: center;
-  height: 64px;
-  padding: 0 6px;
+  height: 72px;
+  padding: 0 8px;
+
+  @media (max-width: 768px) {
+    height: 60px;
+    justify-content: space-between;
+  }
 `;
 
 const BurgerButton = styled.button`
-  width: 44px;
-  height: 64px;
+  width: 48px;
+  height: 72px;
   display: grid;
   place-items: center;
   background: none;
   border: none;
   color: #f9f9f9;
   cursor: pointer;
+
+  @media (max-width: 768px) {
+    width: 40px;
+    height: 60px;
+  }
 `;
 
 const Logo = styled.img`
-  height: 18px;
-  margin-left: 6px;
+  height: 22px;
+  margin-left: 8px;
+
+  @media (max-width: 768px) {
+    height: 18px;
+  }
 `;
 
 const Nav = styled.nav`
-  display: grid;
-  padding: 0 6px;
-  gap: 2px;
+  display: flex;
+  flex-direction: column;
+  padding: 0 8px;
+  gap: 4px;
+  flex-grow: 1;
+
+  @media (max-width: 768px) {
+    padding: 0 4px;
+    display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
+  }
 `;
 
 const NavButton = styled.button`
   display: flex;
-  gap: 12px;
+  gap: 14px;
   align-items: center;
-  height: 44px;
+  height: 50px;
   width: 100%;
   font-family: "Poppins", sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   text-transform: capitalize;
   line-height: 1;
-  padding: 0 12px;
-  border-radius: 8px;
+  padding: 0 14px;
+  border-radius: ${({ isOpen }) => (isOpen ? "10px" : "25px")};
   opacity: 0.7;
   color: #f9f9f9;
   background: none;
   border: none;
   cursor: pointer;
-  transition: opacity 0.3s, background 0.3s;
+  transition: opacity 0.3s, background 0.3s, border-radius 0.45s;
 
   &:hover {
     background: rgba(0, 0, 0, 0.3);
     opacity: 1;
   }
-`;
 
-const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  span {
+    display: ${({ isOpen }) => (isOpen ? "inline" : "none")};
+  }
+
+  @media (max-width: 768px) {
+    height: 44px;
+    font-size: 14px;
+    padding: 0 10px;
+    border-radius: 10px;
+    
+    span {
+      display: inline;
+    }
+  }
 `;
 
 const navItems = [
@@ -129,7 +165,7 @@ export const Sidebar3 = () => {
   }, []);
 
   const toggleSidebar = () => {
-    setIsOpen(!isOpen);
+    setIsOpen(prevState => !prevState);
   };
 
   return (
@@ -139,21 +175,20 @@ export const Sidebar3 = () => {
           <SidebarInner>
             <SidebarHeader>
               <BurgerButton onClick={toggleSidebar}>
-                {isOpen ? <CloseIcon /> : <MenuIcon />}
+                {isOpen ? <CloseIcon fontSize={isMobile ? "medium" : "large"} /> : <MenuIcon fontSize={isMobile ? "medium" : "large"} />}
               </BurgerButton>
-              {(!isMobile || isOpen) && <Logo src={logo} alt="logo" />}
+              <Logo src={logo} alt="logo" />
             </SidebarHeader>
-            <Nav>
+            <Nav isOpen={isOpen}>
               {navItems.map((item) => (
-                <NavButton key={item.label}>
-                  <item.icon />
-                  {(!isMobile || isOpen) && <span>{item.label}</span>}
+                <NavButton key={item.label} isOpen={isOpen || isMobile}>
+                  <item.icon fontSize={isMobile ? "small" : "medium"} />
+                  <span>{item.label}</span>
                 </NavButton>
               ))}
             </Nav>
           </SidebarInner>
         </SidebarWrapper>
-        {isMobile && isOpen && <Overlay onClick={toggleSidebar} />}
       </PageWrapper>
     </ThemeProvider>
   );
